@@ -3,16 +3,16 @@ require("debug")
 local wificonfig = {}
 
 function setupWifiMode(action)
-    --local json = require "cjson"
-    --file.open("wifi_settings.json","r")
-    --local theSettings = file.read()
-    --local settings = json.decode(theSettings)
-    --file.close()
+    local json = require "cjson"
+    file.open("wifi_settings.json","r")
+    local theSettings = file.read()
+    local settings = json.decode(theSettings)
+    file.close()
 
     debugmsg("set up wifi mode")
     wifi.setmode(wifi.STATION)
-    wifi.sta.config("burton2G","customflyingv")
-    --wifi.sta.config(settings.sid,settings.password)
+    --wifi.sta.config("burton2G","customflyingv")
+    wifi.sta.config(settings.sid,settings.pwd)
 
     wifi.sta.connect()
     tmr.alarm(1, 1000, 1, function()
