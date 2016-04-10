@@ -31,11 +31,13 @@ function NADsend(command, donecb)
   --  ie Main.Volume? --> response is Main.Volume=-30
   --     Main.Source=3 --> response is Main.Source=3
   uart.on("data", "\r", function(data)
+      -- release timer and handler. important to do that before
+      -- calling the callback
+      tmr.stop(0)       -- release the timer
+      uart.on("data")   -- release the handler
       --print("NODEMCU debug: received from uart:", data)
       --uart.write(0, "NODEMCU says: "..data:reverse())
       donecb(true)
-      uart.on("data")   -- release the handler
-      tmr.stop(0)       -- release the timer
     end,0)
 end
 
@@ -58,4 +60,4 @@ function NADswitchInput(inputSource, doneCb)
     end)
 end
 
-uart.setup(0,9600,8,0,1)
+uart.setup(0,115200,8,0,1)
