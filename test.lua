@@ -1,7 +1,10 @@
 uart.setup(0,115200,8,0,1)
---print("Starting NADcontroler")
 
---print("Setting up WIFI...")
+require("debug")
+
+debugmsg("Starting NADcontroler")
+
+debugmsg("Setting up WIFI...")
 
 local wifi = require("wificonfig")
 

@@ -1,20 +1,21 @@
 require("rs232")
+require("debug")
 
 srv=net.createServer(net.TCP)
     srv:listen(80,function(conn)
 
     conn:on("receive",function(conn,payload)
-        --print("Got something...["..payload.."]")
+        debugmsg("Got something...["..payload.."]")
         -- POST /switchnad/1 HTTP/1.1
         -- GET / HTTP/1.1
         -- GET /favicon.ico HTTP/1.1
 
         restmethod = string.sub(payload,1, payload:find(" ")-1)
-        --print("Method ["..restmethod.."]")
+        debugmsg("Method ["..restmethod.."]")
 
         if restmethod == "GET" then
             --serve a simple website to the user
-            --print("serve our simple website")
+            debugmsg("serve our simple website")
             conn:send("HTTP/1.1 200 OK\n\n")
             conn:send("<!DOCTYPE HTML>\n")
             conn:send("<html><body>\n")
@@ -28,7 +29,7 @@ srv=net.createServer(net.TCP)
             --check if the command is proper and execute it
             --print("control the NAD ["..payload:sub(6, 18).."]")
             if payload:sub(6, 18) == "/switchinput/" then
-                --print("switch to another input")
+                debugmsg("switch to another input")
                 NADswitchInput(1, function(result)
                     if result then
                         conn:send("HTTP/1.1 200 OK\n\n")
@@ -38,7 +39,7 @@ srv=net.createServer(net.TCP)
                     end
                 end)
             elseif payload:sub(6, 15) == "/poweroff/" then
-                --print("power off the amp")
+                debugmsg("power off the amp")
                 NADpowerOff(function(result)
                     if result then
                         conn:send("HTTP/1.1 200 OK\n\n")

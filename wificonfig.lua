@@ -1,3 +1,5 @@
+require("debug")
+
 local wificonfig = {}
 
 function setupWifiMode(action)
@@ -7,7 +9,7 @@ function setupWifiMode(action)
     --local settings = json.decode(theSettings)
     --file.close()
 
-    print("set up wifi mode")
+    debugmsg("set up wifi mode")
     wifi.setmode(wifi.STATION)
     wifi.sta.config("burton2G","customflyingv")
     --wifi.sta.config(settings.sid,settings.password)
@@ -15,10 +17,10 @@ function setupWifiMode(action)
     wifi.sta.connect()
     tmr.alarm(1, 1000, 1, function()
         if wifi.sta.getip()== nil then
-            print("IP unavaiable, Waiting...")
+            debugmsg("IP unavaiable, Waiting...")
         else
             tmr.stop(1)
-            print("Config done, IP is "..wifi.sta.getip())
+            debugmsg("Config done, IP is "..wifi.sta.getip())
             action()
         end
     end)

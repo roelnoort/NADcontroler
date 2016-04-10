@@ -2,15 +2,18 @@
 --
 --baud rate 115.200 with 8 data bits, 1 stop bit and no parity bits
 --no flow control
+--the baud rate should be set in init.lua as the very first statement
 --
 --send <CR> before and after each command
 --Hex code for <CR> is 0x0D
 
+require("debug")
+
 function callbackfordone(result)
     if result then
-        print("NODEMCU debug: callbackfordone - success")
+        debugmsg("NODEMCU debug: callbackfordone - success")
     else
-        print("NODEMCU debug: callbackfordone - error")
+        debugmsg("NODEMCU debug: callbackfordone - error")
     end
 end
 
@@ -21,7 +24,7 @@ function NADsend(command, donecb)
 
   -- start the timeout timer
   tmr.alarm(0,5000,0, function()
-    --print("NODEMCU debug: response takes too much time, aborting")
+    debugmsg("NODEMCU debug: response takes too much time, aborting")
     uart.on("data")
     donecb(false)
   end)
@@ -35,8 +38,7 @@ function NADsend(command, donecb)
       -- calling the callback
       tmr.stop(0)       -- release the timer
       uart.on("data")   -- release the handler
-      --print("NODEMCU debug: received from uart:", data)
-      --uart.write(0, "NODEMCU says: "..data:reverse())
+      debugmsg("NODEMCU debug: received from uart:" .. data)
       donecb(true)
     end,0)
 end
@@ -59,5 +61,3 @@ function NADswitchInput(inputSource, doneCb)
         end
     end)
 end
-
-uart.setup(0,115200,8,0,1)
