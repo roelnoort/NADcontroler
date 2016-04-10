@@ -1,3 +1,4 @@
+require("rs232")
 
 srv=net.createServer(net.TCP)
     srv:listen(80,function(conn)
