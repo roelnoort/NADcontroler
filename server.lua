@@ -46,7 +46,9 @@ srv:listen(80,function(conn)
             --check if the command is proper and execute it
             if payload:sub(6, 18) == "/switchinput/" then
                 debugmsg("switch to another input")
-                NADswitchInput(1, function(result)
+                input = payload:sub(19)
+                debugmsg("input="..input)
+                NADswitchInput(input, function(result)
                     if result then
                         conn:send("HTTP/1.1 200 OK\n\n")
                     else
