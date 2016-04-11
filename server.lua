@@ -1,8 +1,25 @@
 require("rs232")
 require("debug")
 
+discover=net.createServer(net.UDP)
+discover:on("receive", function(conn, data)
+    print("UDP data received "..data)
+    debugmsg("UDP data received"..data)
+    conn:send("NadControler Discovery")
+end)
+discover:listen(2705)
+
+--discover:listen(2705, function(conn)
+--    conn:on("receive", function(conn, data)
+--        print("UDP data received "..data)
+--        debugmsg("UDP data received")
+--    end)
+--end)
+
+
 srv=net.createServer(net.TCP)
-    srv:listen(80,function(conn)
+
+srv:listen(80,function(conn)
 
     conn:on("receive",function(conn,payload)
         debugmsg("Got something...["..payload.."]")
@@ -27,7 +44,6 @@ srv=net.createServer(net.TCP)
             conn:send("</body></html>\n")
         elseif restmethod == "POST" then
             --check if the command is proper and execute it
-            --print("control the NAD ["..payload:sub(6, 18).."]")
             if payload:sub(6, 18) == "/switchinput/" then
                 debugmsg("switch to another input")
                 NADswitchInput(1, function(result)
