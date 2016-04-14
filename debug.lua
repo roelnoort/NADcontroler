@@ -6,4 +6,6 @@ function debugmsg(s)
     file.open("debug.log", "a")
     file.writeline(s)
     file.close(file)
+
+    print(s)
 end
