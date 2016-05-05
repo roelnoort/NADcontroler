@@ -48,18 +48,25 @@ function setupWifiMode(action)
     wifi.sta.config(settings.sid,settings.pwd)
 
     wifi.sta.connect()
-    local attempts = 5
-    
+    attempts = 5
+
+    -- wifi.sta.status
+    -- 0 : station idle
+    -- 1 : station connecting
+    -- 2 : station wrong pwd
+    -- 3 : station no ap found
+    -- 4 : station connect fail
+    -- 5 : station got ip
     tmr.alarm(1, 1000, 1, function()
-        --attempts = attempts - 1
+        attempts = attempts - 1
         debugmsg("hello")
         debugmsg("wifi status : "..wifi.sta.status())
         if wifi.sta.getip()== nil then
             if attempts == 0 then
                 debugmsg("IP unavailable, going to config screen")
-                tmr.stop(1)
-                wifi.sta.disconnect()
-                configWifi()
+                --tmr.stop(1)
+                --wifi.sta.disconnect()
+                --configWifi()
             else
                 debugmsg("IP unavailable, Waiting...")
             end

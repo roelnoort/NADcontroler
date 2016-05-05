@@ -1,4 +1,4 @@
-local wifi = require("wificonfig")
+local w = require("wificonfig")
 
 setupWifiMode( function()
   dofile("server.lua")
